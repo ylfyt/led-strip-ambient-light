@@ -5,25 +5,25 @@
 class Animator
 {
 private:
-    CRGB *leds;
+    CRGB leds[20];
     CRGBPalette16 palette;
     int num;
     int maxBrightness;
-    float brightness;
+    int brightness;
     bool dynamic;
     bool leftDir;
     int speed;
     byte paletteIndex;
 
 public:
-    Animator(int, int, CRGBPalette16);
+    Animator(int, int);
     ~Animator();
     void setBrightness(float);
     void run();
     void setPalette(CRGBPalette16);
     void refresh();
     int getSpeed();
-    void begin();
+    void begin(CRGBPalette16);
 };
 
 int Animator::getSpeed()
@@ -31,42 +31,39 @@ int Animator::getSpeed()
     return this->speed;
 }
 
-Animator::Animator(int num, int maxBrightness, CRGBPalette16 defaultPalette) : leds(new CRGB[num])
+Animator::Animator(int num, int maxBrightness)
 {
     this->num = num;
     this->maxBrightness = maxBrightness;
-    this->brightness = 0.1;
+    this->brightness = (int)maxBrightness * 0.1;
     this->dynamic = true;
     this->leftDir = true;
     this->paletteIndex = 0;
-    this->palette = defaultPalette;
     this->speed = 10;
-
-    FastLED.addLeds<WS2812B, D2, GRB>(leds, num);
-    FastLED.setBrightness((int)this->maxBrightness * this->brightness);
 }
 
 Animator::~Animator()
 {
 }
 
-void Animator::begin()
+void Animator::begin(CRGBPalette16 defaultPalette)
 {
-    this->setPalette(this->palette);
+    this->palette = defaultPalette;
+    FastLED.addLeds<WS2812B, D2, GRB>(this->leds, this->num);
+    // FastLED.setBrightness(this->brightness);
+    this->refresh();
 }
 
-void Animator::setBrightness(float brightness)
+void Animator::setBrightness(float persen)
 {
-    this->brightness = brightness;
-    FastLED.setBrightness(this->maxBrightness * brightness);
+    this->brightness = (int)this->maxBrightness * persen;
+    FastLED.setBrightness(this->brightness);
 }
 
 void Animator::setPalette(CRGBPalette16 pal)
 {
-    Serial.println("Test");
     this->palette = pal;
-    fill_palette(this->leds, this->num, this->paletteIndex, 255 / this->num, this->palette, this->maxBrightness * this->brightness, LINEARBLEND);
-    FastLED.show();
+    this->refresh();
 }
 
 void Animator::run()
@@ -75,6 +72,10 @@ void Animator::run()
     {
         EVERY_N_MILLISECONDS(this->speed)
         {
+            if (this->leftDir)
+                this->paletteIndex--;
+            else
+                this->paletteIndex++;
             this->refresh();
         }
     }
@@ -82,12 +83,7 @@ void Animator::run()
 
 void Animator::refresh()
 {
-    // Serial.println(this->maxBrightness * this->brightness);
-    fill_palette(this->leds, this->num, this->paletteIndex, 255 / this->num, this->palette, this->maxBrightness * this->brightness, LINEARBLEND);
-    if (this->leftDir)
-        this->paletteIndex--;
-    else
-        this->paletteIndex++;
+    fill_palette(this->leds, this->num, this->paletteIndex, 255 / this->num, this->palette, this->brightness, LINEARBLEND);
     FastLED.show();
 }
 

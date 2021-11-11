@@ -7,7 +7,7 @@
 #include "Palettes.h"
 
 Connection conn("ya", "12345678y");
-Animator animator(60, 100, Palettes::realSunset);
+Animator animator(20, 100);
 
 int count = 0;
 
@@ -16,7 +16,7 @@ long prev = 0;
 void setup()
 {
 	Serial.begin(9600);
-	animator.begin();
+	animator.begin(Palettes::realSunset);
 }
 
 void loop()
