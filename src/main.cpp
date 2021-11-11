@@ -2,6 +2,9 @@
 #include <Arduino.h>
 #include <FastLED.h>
 
+#include <AsyncJson.h>
+#include <ArduinoJson.h>
+
 #include "Connection.h"
 #include "WebServer.h"
 #include "Animator.h"
@@ -12,6 +15,8 @@ Animator animator(20, 100);
 WebServer server(80);
 
 int count = 0;
+
+void parseData();
 
 void setup()
 {
@@ -24,22 +29,21 @@ void loop()
 {
 	conn.checkConnection();
 
-	// if (gs.changePalette)
-	// {
-	// 	// GlobalState::stopSwitch();
-	// 	if (gs.paletteIdx == 0)
-	// 	{
-	// 		animator.setPalette(Palettes::spainFlag);
-	// 	}
-	// 	else if (gs.paletteIdx == 1)
-	// 	{
-	// 		animator.setPalette(Palettes::alarm);
-	// 	}
-	// 	else
-	// 	{
-	// 		animator.setPalette(Palettes::realSunset);
-	// 	}
-	// }
+	if (server.anyData != "")
+	{
+		parseData();
+	}
 
 	animator.run();
+}
+
+void parseData()
+{
+	if (server.anyData == "json")
+	{
+		server.anyData = "";
+		JsonObject json = server.json;
+		String s = json.getMember("data");
+		Serial.println(s);
+	}
 }
