@@ -15,18 +15,31 @@ private:
     bool leftDir;
     int speed;
     byte paletteIndex;
+    long prev;
 
 public:
     Animator(int, int, float, bool);
     ~Animator();
-    void setBrightness(float);
+    void setBrightness(int);
     void run();
     void setPalette(CRGBPalette16);
     void setDirection(bool);
     void refresh();
     int getSpeed();
+    void setDynamic(bool dynamic);
+    void setSpeed(int speed);
     void begin(CRGBPalette16);
 };
+
+void Animator::setSpeed(int speed)
+{
+    this->speed = speed;
+}
+
+void Animator::setDynamic(bool dynamic)
+{
+    this->dynamic = dynamic;
+}
 
 int Animator::getSpeed()
 {
@@ -47,6 +60,7 @@ Animator::Animator(int num, int maxBrightness, float brightness = 0.5, bool dyna
     this->leftDir = true;
     this->paletteIndex = 0;
     this->speed = 10;
+    this->prev = 0;
 }
 
 Animator::~Animator()
@@ -62,8 +76,13 @@ void Animator::begin(CRGBPalette16 defaultPalette)
     this->refresh();
 }
 
-void Animator::setBrightness(float persen)
+void Animator::setBrightness(int val)
 {
+    if (val > 100)
+        val = 100;
+    else if (val < 0)
+        val = 0;
+    float persen = (float)val / 100;
     this->brightness = (int)255 * persen;
     this->refresh();
 }
@@ -78,8 +97,10 @@ void Animator::run()
 {
     if (dynamic)
     {
-        EVERY_N_MILLISECONDS(this->speed)
+        long curr = millis();
+        if (curr - this->prev >= this->speed)
         {
+            this->prev = curr;
             if (this->leftDir)
                 this->paletteIndex--;
             else
@@ -91,6 +112,7 @@ void Animator::run()
 
 void Animator::refresh()
 {
+
     nblendPaletteTowardPalette(this->palette, this->targetPalette, 10);
     fill_palette(this->leds, this->num, this->paletteIndex, 255 / this->num, this->palette, this->brightness, LINEARBLEND);
     FastLED.show();

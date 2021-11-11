@@ -12,9 +12,12 @@ private:
 
 public:
     String anyData;
-    int paletteIdx;
-    float brightness;
-    JsonObject json;
+    String idx;
+    String brightness;
+    String speed;
+    String dynamic;
+    String left;
+    String palette;
     WebServer(int);
     ~WebServer();
     void routing();
@@ -40,36 +43,24 @@ void WebServer::routing()
     this->server.on("/", [&](AsyncWebServerRequest *req)
                     { req->send(200, "text/html", "<h1>hello, World</h1>"); });
 
-    this->server.addHandler(new AsyncCallbackJsonWebHandler(
-        "/api/endpoint",
-        [this](AsyncWebServerRequest *request, JsonVariant &json)
-        {
-            if (not json.is<JsonObject>())
-            {
-                request->send(400, "text/plain", "Not an object");
-                return;
-            }
-            auto &&data = json.as<JsonObject>();
-
-            JsonObject js = data;
-            this->anyData = "json";
-            this->json = js;
-
-            if (not js["name"].is<String>())
-            {
-                request->send(400, "text/plain", "name is not a string");
-                return;
-            }
-            String name = js["name"].as<String>();
-            Serial.println(name);
-            request->send(200, "text/plain", "ok");
-        }));
-
     AsyncCallbackJsonWebHandler *handler = new AsyncCallbackJsonWebHandler("/json", [&](AsyncWebServerRequest *request, JsonVariant &json)
                                                                            {
-                                                                               JsonObject jsonObj = json.to<JsonObject>();
-                                                                               this->json = jsonObj;
+                                                                               JsonObject jsonObj = json.as<JsonObject>();
+                                                                               String palette = jsonObj.getMember("palette");
+                                                                               String brightness = jsonObj.getMember("brightness");
+                                                                               String speed = jsonObj.getMember("speed");
+                                                                               String dynamic = jsonObj.getMember("dynamic");
+                                                                               String left = jsonObj.getMember("left");
+                                                                               String idx = jsonObj.getMember("idx");
+
                                                                                this->anyData = "json";
+                                                                               this->palette = palette;
+                                                                               this->brightness = brightness;
+                                                                               this->speed = speed;
+                                                                               this->dynamic = dynamic;
+                                                                               this->left = left;
+                                                                               this->idx = idx;
+
                                                                                request->send(200, "text/plain", "success");
                                                                            });
 
