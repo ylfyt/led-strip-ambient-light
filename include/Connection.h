@@ -1,23 +1,30 @@
 #ifndef __CONNECTION_H__
 
+#include <FastLED.h>
 #include <ESP8266WiFi.h>
 
 class Connection
 {
 private:
-    char *ssid = "ssid";
-    char *password = "password";
+    String ssid;
+    String password;
+    int connectionState;
 
 public:
-    Connection(char *ssid, char *password);
+    Connection(String, String);
     ~Connection();
     void connect();
+    void reconnect();
+    bool isConnect();
+    void checkConnection();
 };
 
-Connection::Connection(char *ssid, char *password)
+Connection::Connection(String ssid, String pass)
 {
     this->ssid = ssid;
-    this->password = password;
+    this->password = pass;
+    this->connectionState = 0;
+    WiFi.mode(WIFI_STA);
 }
 
 Connection::~Connection()
@@ -26,20 +33,50 @@ Connection::~Connection()
 
 void Connection::connect()
 {
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(this->ssid, this->password);
-
-    Serial.println();
-    Serial.print("Connecting to ");
-    Serial.print(ssid);
-    while (WiFi.status() != WL_CONNECTED)
+    if (this->connectionState == 0)
     {
-        Serial.print(".");
-        delay(100);
+        this->connectionState = 1;
+        WiFi.begin(this->ssid.c_str(), this->password.c_str());
+        Serial.println();
+        Serial.print("Connecting to ");
+        Serial.print(ssid);
+        Serial.print("...");
     }
-    Serial.println();
-    Serial.print("Connected http://");
-    Serial.println(WiFi.localIP());
+}
+
+void Connection::reconnect()
+{
+    if (this->connectionState == 2)
+    {
+        this->connectionState = 0;
+        WiFi.disconnect();
+        Serial.println("Connection Disconnect!");
+    }
+
+    this->connect();
+}
+
+bool Connection::isConnect()
+{
+    return WiFi.status() == WL_CONNECTED;
+}
+
+void Connection::checkConnection()
+{
+    if (!this->isConnect())
+    {
+        this->reconnect();
+    }
+    else
+    {
+        if (this->connectionState == 1)
+        {
+            this->connectionState = 2;
+            Serial.println();
+            Serial.print("Connected http://");
+            Serial.println(WiFi.localIP());
+        }
+    }
 }
 
 #endif
