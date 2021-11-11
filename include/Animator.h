@@ -16,11 +16,12 @@ private:
     byte paletteIndex;
 
 public:
-    Animator(int, int);
+    Animator(int, int, bool);
     ~Animator();
     void setBrightness(float);
     void run();
     void setPalette(CRGBPalette16);
+    void setDirection(bool);
     void refresh();
     int getSpeed();
     void begin(CRGBPalette16);
@@ -31,12 +32,17 @@ int Animator::getSpeed()
     return this->speed;
 }
 
-Animator::Animator(int num, int maxBrightness) : leds(new CRGB[num])
+void Animator::setDirection(bool left)
+{
+    this->leftDir = left;
+}
+
+Animator::Animator(int num, int maxBrightness, bool dynamic) : leds(new CRGB[num])
 {
     this->num = num;
     this->maxBrightness = maxBrightness;
-    this->brightness = (int)maxBrightness * 0.1;
-    this->dynamic = true;
+    this->brightness = (int)255 * 0.5;
+    this->dynamic = dynamic;
     this->leftDir = true;
     this->paletteIndex = 0;
     this->speed = 10;
@@ -50,14 +56,14 @@ void Animator::begin(CRGBPalette16 defaultPalette)
 {
     this->palette = defaultPalette;
     FastLED.addLeds<WS2812B, D2, GRB>(this->leds, this->num);
-    // FastLED.setBrightness(this->brightness);
+    FastLED.setBrightness(this->maxBrightness);
     this->refresh();
 }
 
 void Animator::setBrightness(float persen)
 {
-    this->brightness = (int)this->maxBrightness * persen;
-    FastLED.setBrightness(this->brightness);
+    this->brightness = (int)255 * persen;
+    this->refresh();
 }
 
 void Animator::setPalette(CRGBPalette16 pal)

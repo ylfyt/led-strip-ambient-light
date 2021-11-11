@@ -24,7 +24,7 @@ Connection::Connection(String ssid, String pass)
     this->ssid = ssid;
     this->password = pass;
     this->connectionState = 0;
-    // WiFi.mode(WIFI_STA);
+    WiFi.mode(WIFI_STA);
 }
 
 Connection::~Connection()

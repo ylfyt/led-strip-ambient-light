@@ -7,7 +7,7 @@
 #include "Palettes.h"
 
 Connection conn("ya", "12345678y");
-Animator animator(40, 100);
+Animator animator(40, 100, true);
 
 int count = 0;
 
@@ -22,5 +22,20 @@ void setup()
 void loop()
 {
 	conn.checkConnection();
+
+	// EVERY_N_MILLISECONDS(1000)
+	// {
+	// 	if (count == 0)
+	// 	{
+	// 		count = 1;
+	// 		animator.setPalette(Palettes::alarm);
+	// 	}
+	// 	else
+	// 	{
+	// 		count = 0;
+	// 		animator.setPalette(Palettes::spainFlag);
+	// 	}
+	// }
+
 	animator.run();
 }
