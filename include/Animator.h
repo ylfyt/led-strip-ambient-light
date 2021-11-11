@@ -5,7 +5,7 @@
 class Animator
 {
 private:
-    CRGB leds[20];
+    CRGB *leds;
     CRGBPalette16 palette;
     int num;
     int maxBrightness;
@@ -31,7 +31,7 @@ int Animator::getSpeed()
     return this->speed;
 }
 
-Animator::Animator(int num, int maxBrightness)
+Animator::Animator(int num, int maxBrightness) : leds(new CRGB[num])
 {
     this->num = num;
     this->maxBrightness = maxBrightness;

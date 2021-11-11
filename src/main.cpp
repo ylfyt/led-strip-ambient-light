@@ -7,7 +7,7 @@
 #include "Palettes.h"
 
 Connection conn("ya", "12345678y");
-Animator animator(20, 100);
+Animator animator(40, 100);
 
 int count = 0;
 
@@ -22,19 +22,5 @@ void setup()
 void loop()
 {
 	conn.checkConnection();
-
-	long curr = millis();
-	EVERY_N_MILLISECONDS(1000)
-	{
-		// if (count % 2 != 0)
-		// {
-		// 	animator.setPalette(Palettes::alarm);
-		// }
-		// else
-		// {
-		// 	animator.setPalette(Palettes::realSunset);
-		// }
-	}
-
 	animator.run();
 }
