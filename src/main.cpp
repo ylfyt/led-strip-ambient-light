@@ -16,26 +16,26 @@ long prev = 0;
 void setup()
 {
 	Serial.begin(9600);
-	animator.begin(Palettes::realSunset);
+	animator.begin(Palettes::spainFlag);
 }
 
 void loop()
 {
 	conn.checkConnection();
 
-	// EVERY_N_MILLISECONDS(1000)
-	// {
-	// 	if (count == 0)
-	// 	{
-	// 		count = 1;
-	// 		animator.setPalette(Palettes::alarm);
-	// 	}
-	// 	else
-	// 	{
-	// 		count = 0;
-	// 		animator.setPalette(Palettes::spainFlag);
-	// 	}
-	// }
+	EVERY_N_SECONDS(5)
+	{
+		if (count == 0)
+		{
+			count = 1;
+			animator.setPalette(Palettes::spainFlag);
+		}
+		else
+		{
+			count = 0;
+			animator.setPalette(Palettes::realSunset);
+		}
+	}
 
 	animator.run();
 }

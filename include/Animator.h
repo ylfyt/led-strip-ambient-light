@@ -7,6 +7,7 @@ class Animator
 private:
     CRGB *leds;
     CRGBPalette16 palette;
+    CRGBPalette16 targetPalette;
     int num;
     int maxBrightness;
     int brightness;
@@ -55,6 +56,7 @@ Animator::~Animator()
 void Animator::begin(CRGBPalette16 defaultPalette)
 {
     this->palette = defaultPalette;
+    this->targetPalette = defaultPalette;
     FastLED.addLeds<WS2812B, D2, GRB>(this->leds, this->num);
     FastLED.setBrightness(this->maxBrightness);
     this->refresh();
@@ -68,7 +70,7 @@ void Animator::setBrightness(float persen)
 
 void Animator::setPalette(CRGBPalette16 pal)
 {
-    this->palette = pal;
+    this->targetPalette = pal;
     this->refresh();
 }
 
@@ -82,13 +84,14 @@ void Animator::run()
                 this->paletteIndex--;
             else
                 this->paletteIndex++;
-            this->refresh();
         }
     }
+    this->refresh();
 }
 
 void Animator::refresh()
 {
+    nblendPaletteTowardPalette(this->palette, this->targetPalette, 10);
     fill_palette(this->leds, this->num, this->paletteIndex, 255 / this->num, this->palette, this->brightness, LINEARBLEND);
     FastLED.show();
 }
