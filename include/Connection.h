@@ -1,7 +1,7 @@
 #ifndef __CONNECTION_H__
 
-#include <FastLED.h>
 #include <ESP8266WiFi.h>
+#include <FastLED.h>
 
 class Connection
 {
@@ -41,6 +41,11 @@ void Connection::connect()
         Serial.print("Connecting to ");
         Serial.print(ssid);
         Serial.print("...");
+    }
+
+    EVERY_N_MILLISECONDS(100)
+    {
+        Serial.print(".");
     }
 }
 
