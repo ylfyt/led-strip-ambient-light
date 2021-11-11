@@ -17,7 +17,7 @@ private:
     byte paletteIndex;
 
 public:
-    Animator(int, int, bool);
+    Animator(int, int, float, bool);
     ~Animator();
     void setBrightness(float);
     void run();
@@ -38,11 +38,11 @@ void Animator::setDirection(bool left)
     this->leftDir = left;
 }
 
-Animator::Animator(int num, int maxBrightness, bool dynamic) : leds(new CRGB[num])
+Animator::Animator(int num, int maxBrightness, float brightness = 0.5, bool dynamic = false) : leds(new CRGB[num])
 {
     this->num = num;
     this->maxBrightness = maxBrightness;
-    this->brightness = (int)255 * 0.5;
+    this->brightness = (int)255 * brightness;
     this->dynamic = dynamic;
     this->leftDir = true;
     this->paletteIndex = 0;

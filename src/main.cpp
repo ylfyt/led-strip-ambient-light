@@ -7,7 +7,7 @@
 #include "Palettes.h"
 
 Connection conn("ya", "12345678y");
-Animator animator(40, 100, true);
+Animator animator(90, 100, 0.4, true);
 
 int count = 0;
 
