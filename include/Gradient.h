@@ -39,4 +39,17 @@ DEFINE_GRADIENT_PALETTE(alarm_p2_1_0_gp){
     242, 1, 1, 255,
     255, 1, 39, 255};
 
+// Gradient palette "spanish_flag_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/ocal/tn/spanish-flag.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 24 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(spanish_flag_gp){
+    0, 255, 0, 0,
+    76, 255, 0, 0,
+    76, 255, 255, 0,
+    178, 255, 255, 0,
+    178, 255, 0, 0,
+    255, 255, 0, 0};
+
 #endif

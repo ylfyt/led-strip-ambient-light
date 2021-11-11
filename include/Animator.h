@@ -22,7 +22,14 @@ public:
     void run();
     void setPalette(CRGBPalette16);
     void refresh();
+    int getSpeed();
+    void begin();
 };
+
+int Animator::getSpeed()
+{
+    return this->speed;
+}
 
 Animator::Animator(int num, int maxBrightness, CRGBPalette16 defaultPalette) : leds(new CRGB[num])
 {
@@ -36,12 +43,16 @@ Animator::Animator(int num, int maxBrightness, CRGBPalette16 defaultPalette) : l
     this->speed = 10;
 
     FastLED.addLeds<WS2812B, D2, GRB>(leds, num);
-    FastLED.setBrightness(this->maxBrightness * this->brightness);
-    this->setPalette(defaultPalette);
+    FastLED.setBrightness((int)this->maxBrightness * this->brightness);
 }
 
 Animator::~Animator()
 {
+}
+
+void Animator::begin()
+{
+    this->setPalette(this->palette);
 }
 
 void Animator::setBrightness(float brightness)
@@ -52,6 +63,7 @@ void Animator::setBrightness(float brightness)
 
 void Animator::setPalette(CRGBPalette16 pal)
 {
+    Serial.println("Test");
     this->palette = pal;
     fill_palette(this->leds, this->num, this->paletteIndex, 255 / this->num, this->palette, this->maxBrightness * this->brightness, LINEARBLEND);
     FastLED.show();
