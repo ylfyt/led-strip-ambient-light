@@ -32,13 +32,28 @@ WebServer::~WebServer()
 void WebServer::begin()
 {
     this->routing();
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
     this->server.begin();
 }
 
 void WebServer::routing()
 {
+    this->server.onNotFound([](AsyncWebServerRequest *request)
+                            {
+                                if (request->method() == HTTP_OPTIONS)
+                                {
+                                    request->send(200);
+                                }
+                                else
+                                {
+                                    request->send(404);
+                                }
+                            });
     this->server.on("/", [&](AsyncWebServerRequest *req)
-                    { req->send(200, "text/html", "<h1>hello, World</h1>"); });
+                    {
+                        AsyncWebServerResponse *response = req->beginResponse(200, "text/html", "<h1>hello, World</h1>");
+                        req->send(response);
+                    });
 
     this->server.on("/strip", HTTP_GET, [this](AsyncWebServerRequest *req)
                     {

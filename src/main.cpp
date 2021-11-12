@@ -11,7 +11,7 @@
 #include "Palettes.h"
 
 Connection conn("ya", "12345678y");
-Animator animator(100, 100, 40);
+Animator animator(100, 100, 20);
 WebServer server(80);
 
 int count = 0;
