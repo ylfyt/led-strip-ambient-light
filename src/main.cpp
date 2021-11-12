@@ -12,22 +12,22 @@
 #include "AppData.h"
 
 Connection conn("ya", "12345678y");
-Animator animator(20, 100);
+Animator animator(100, 100, 40);
 WebServer server(80);
 
 int count = 0;
+int NUM_PALETTES = sizeof(Palettes) / sizeof(Palettes[0]);
 
 AppData data;
 
 void parseData();
-void explode(String temp, char del, int *data, int n);
-int countN(String temp, char del);
+void changePalette(int idx);
 
 void setup()
 {
 	Serial.begin(9600);
 	server.begin();
-	animator.begin(Palettes::spainFlag);
+	animator.begin(Palettes[2]);
 }
 
 void loop()
@@ -49,12 +49,8 @@ void loop()
 		int speed = data.speed.toInt();
 		animator.setSpeed(speed);
 
-		String temp = data.palette;
-		temp = temp.substring(1, temp.length() - 1);
-
-		int n = countN(temp, ',');
-		int data[n];
-		explode(temp, ',', data, n);
+		int idx = data.idx.toInt();
+		changePalette(idx);
 	}
 
 	if (server.anyData != "")
@@ -65,6 +61,16 @@ void loop()
 	animator.run();
 }
 
+void changePalette(int idx)
+{
+	if (idx < 0)
+		idx = 0;
+	else if (idx > NUM_PALETTES - 1)
+		idx = NUM_PALETTES - 1;
+
+	animator.setPalette(Palettes[idx]);
+}
+
 void parseData()
 {
 	if (server.anyData == "json")
@@ -72,47 +78,4 @@ void parseData()
 		server.anyData = "";
 		data = {true, server.brightness, server.idx, server.speed, server.dynamic, server.left, server.palette};
 	}
-}
-
-int countN(String temp, char del)
-{
-	if (temp.length() == 0)
-		return 0;
-	else
-	{
-		int n = 1;
-		for (size_t i = 0; i < temp.length(); i++)
-		{
-			if (temp[i] == del)
-			{
-				n++;
-			}
-		}
-		return n;
-	}
-}
-
-void explode(String temp, char del, int *data, int n)
-{
-	int idx = 0;
-	String a = "";
-	for (size_t i = 0; i < temp.length(); i++)
-	{
-		if (temp[i] == del)
-		{
-			int aa = a.toInt();
-			a = "";
-			data[idx++] = aa;
-		}
-		else
-		{
-			a += temp[i];
-		}
-	}
-	data[idx++] = a.toInt();
-}
-
-CRGBPalette16 makePalette(int *data)
-{
-	CRGB::Magenta;
 }

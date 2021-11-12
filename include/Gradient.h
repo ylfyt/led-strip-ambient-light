@@ -2,6 +2,65 @@
 
 #include <FastLED.h>
 
+// Gradient palette "bhw3_54_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/bhw/bhw3/tn/bhw3_54.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 24 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(bhw3_54_gp){
+    0, 72, 117, 123,
+    40, 117, 168, 182,
+    101, 167, 176, 149,
+    158, 220, 231, 95,
+    216, 234, 103, 166,
+    255, 173, 99, 135};
+
+// Gradient palette "bhw1_01_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/bhw/bhw1/tn/bhw1_01.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 12 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(bhw1_01_gp){
+    0, 227, 101, 3,
+    117, 194, 18, 19,
+    255, 92, 8, 192};
+
+// Gradient palette "bhw1_13_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/bhw/bhw1/tn/bhw1_13.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 8 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(bhw1_13_gp){
+    0, 255, 255, 45,
+    255, 157, 57, 197};
+
+// Gradient palette "bhw1_hello_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/bhw/bhw1/tn/bhw1_hello.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 32 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(bhw1_hello_gp){
+    0, 237, 156, 197,
+    35, 244, 189, 230,
+    56, 255, 255, 255,
+    79, 244, 189, 230,
+    109, 237, 156, 197,
+    160, 121, 255, 255,
+    196, 255, 255, 255,
+    255, 121, 255, 255};
+
+// Gradient palette "Yellow_Orange_gp", originally from
+// http://soliton.vm.bytemark.co.uk/pub/cpt-city/ggr/tn/Yellow_Orange.png.index.html
+// converted for FastLED with gammas (2.6, 2.2, 2.5)
+// Size: 20 bytes of program space.
+
+DEFINE_GRADIENT_PALETTE(Yellow_Orange_gp){
+    0, 255, 199, 0,
+    34, 255, 121, 0,
+    144, 255, 63, 0,
+    241, 222, 51, 1,
+    255, 194, 39, 1};
+
 DEFINE_GRADIENT_PALETTE(Sunset_Real_gp){
     0, 120, 0, 0,
     22, 179, 22, 0,
@@ -38,22 +97,5 @@ DEFINE_GRADIENT_PALETTE(alarm_p2_1_0_gp){
     229, 12, 1, 255,
     242, 1, 1, 255,
     255, 1, 39, 255};
-
-// Gradient palette "Blues_05_gp", originally from
-// http://soliton.vm.bytemark.co.uk/pub/cpt-city/cb/seq/tn/Blues_05.png.index.html
-// converted for FastLED with gammas (2.6, 2.2, 2.5)
-// Size: 40 bytes of program space.
-
-DEFINE_GRADIENT_PALETTE(spanish_flag_gp){
-    0, 215, 229, 255,
-    51, 215, 229, 255,
-    51, 117, 175, 199,
-    102, 117, 175, 199,
-    102, 26, 109, 164,
-    153, 26, 109, 164,
-    153, 3, 57, 120,
-    204, 3, 57, 120,
-    204, 1, 20, 74,
-    255, 1, 20, 74};
 
 #endif
