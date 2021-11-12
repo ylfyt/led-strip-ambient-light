@@ -9,7 +9,6 @@
 #include "WebServer.h"
 #include "Animator.h"
 #include "Palettes.h"
-#include "AppData.h"
 
 Connection conn("ya", "12345678y");
 Animator animator(100, 100, 40);
@@ -18,9 +17,11 @@ WebServer server(80);
 int count = 0;
 int NUM_PALETTES = sizeof(Palettes) / sizeof(Palettes[0]);
 
-AppData data;
+Params params;
+bool newData = false;
 
 void parseData();
+void updateData();
 void changePalette(int idx);
 
 void setup()
@@ -34,31 +35,52 @@ void loop()
 {
 	conn.checkConnection();
 
-	if (data.status)
+	if (newData)
 	{
-		data.status = false;
-		int val = data.brightness.toInt();
-		animator.setBrightness(val);
-
-		bool dynamic = data.dynamic.toInt() == 1;
-		animator.setDynamic(dynamic);
-
-		bool left = data.left.toInt() == 1;
-		animator.setDirection(left);
-
-		int speed = data.speed.toInt();
-		animator.setSpeed(speed);
-
-		int idx = data.idx.toInt();
-		changePalette(idx);
+		newData = false;
+		updateData();
 	}
 
-	if (server.anyData != "")
+	if (server.anyReq)
 	{
+		server.anyReq = false;
 		parseData();
 	}
 
 	animator.run();
+}
+
+void updateData()
+{
+	if (params.getStatus("p"))
+	{
+		int val = params.getValue("p");
+		changePalette(val);
+	}
+
+	if (params.getStatus("b"))
+	{
+		int val = params.getValue("b");
+		animator.setBrightness(val);
+	}
+
+	if (params.getStatus("d"))
+	{
+		bool val = params.getValue("d");
+		animator.setDynamic(val);
+	}
+
+	if (params.getStatus("l"))
+	{
+		bool val = params.getValue("l");
+		animator.setDirection(val);
+	}
+
+	if (params.getStatus("s"))
+	{
+		int val = params.getValue("s");
+		animator.setSpeed(val);
+	};
 }
 
 void changePalette(int idx)
@@ -73,9 +95,6 @@ void changePalette(int idx)
 
 void parseData()
 {
-	if (server.anyData == "json")
-	{
-		server.anyData = "";
-		data = {true, server.brightness, server.idx, server.speed, server.dynamic, server.left, server.palette};
-	}
+	params = server.params;
+	newData = true;
 }
