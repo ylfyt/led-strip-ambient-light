@@ -6,6 +6,7 @@
 #include <ArduinoJson.h>
 
 #include "AppData.h"
+#include "Palettes.h"
 
 class WebServer
 {
@@ -19,6 +20,7 @@ public:
     ~WebServer();
     void routing();
     void begin();
+    String getCurrentJson();
 };
 
 WebServer::WebServer(int port) : server(port), params()
@@ -49,10 +51,29 @@ void WebServer::routing()
                                     request->send(404);
                                 }
                             });
+
     this->server.on("/", [&](AsyncWebServerRequest *req)
+                    { req->send(200, "text/html", "<h1>Hello, World</h1>"); });
+    this->server.on("/current", [&](AsyncWebServerRequest *req)
                     {
-                        AsyncWebServerResponse *response = req->beginResponse(200, "text/html", "<h1>hello, World</h1>");
-                        req->send(response);
+                        if (!req->hasParam("pw"))
+                        {
+                            req->send(400, "text/plain", "Access Denied");
+                            return;
+                        }
+
+                        String pw = req->getParam("pw")->value();
+                        if (pw != "1234")
+                        {
+                            req->send(400, "text/plain", "Auth Failed");
+                            return;
+                        }
+
+                        // Json Constructor
+                        String json = this->getCurrentJson();
+
+                        // params.print();
+                        req->send(200, "application/json", json);
                     });
 
     this->server.on("/strip", HTTP_GET, [this](AsyncWebServerRequest *req)
@@ -117,6 +138,45 @@ void WebServer::routing()
                             req->send(200, "text/plain", "ok");
                         }
                     });
+}
+
+String WebServer::getCurrentJson()
+{
+    String brightness = String(this->params.getValue("b"));
+    String palette = String(this->params.getValue("p"));
+    String speed = String(this->params.getValue("s"));
+
+    String dynamic;
+    if (this->params.getValue("d") == 1)
+        dynamic = "on";
+    else
+        dynamic = "off";
+
+    String direction;
+    if (this->params.getValue("l") == 1)
+        direction = "left";
+    else
+        direction = "right";
+
+    int n = sizeof(palettesName) / sizeof(palettesName[0]);
+    String names = "[";
+    for (size_t i = 0; i < n; i++)
+    {
+        if (i != n - 1)
+            names += "\"" + palettesName[i] + "\",";
+        else
+            names += "\"" + palettesName[i] + "\"";
+    }
+    names += "]";
+
+    String json = "{\"dyn\":{\"dynamic\":\"" + dynamic + "\",";
+    json += "\"speed\":" + speed + ",";
+    json += "\"direction\":\"" + direction + "\"},";
+    json += "\"pal\":{\"palette\":" + palette + ",";
+    json += "\"brightness\":" + brightness + ",";
+    json += "\"palettes\":" + names + "}}";
+
+    return json;
 }
 
 #endif

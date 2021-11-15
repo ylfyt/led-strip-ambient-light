@@ -8,7 +8,6 @@
 #include "Connection.h"
 #include "WebServer.h"
 #include "Animator.h"
-#include "Palettes.h"
 
 Connection conn("ya", "12345678y");
 Animator animator(100, 100, 20);
@@ -29,6 +28,13 @@ void setup()
 	Serial.begin(9600);
 	server.begin();
 	animator.begin(Palettes[2]);
+
+	params.setValue("p", 2);
+	params.setValue("b", 20);
+	params.setValue("d", 0);
+	params.setValue("l", 1);
+	params.setValue("s", 10);
+	server.params = params;
 }
 
 void loop()
