@@ -7,6 +7,7 @@
 
 #include "AppData.h"
 #include "Palettes.h"
+#include "credential.h"
 
 class WebServer
 {
@@ -63,7 +64,7 @@ void WebServer::routing()
                         }
 
                         String pw = req->getParam("pw")->value();
-                        if (pw != "1234")
+                        if (pw != API_PASSWORD)
                         {
                             req->send(400, "text/plain", "Auth Failed");
                             return;
@@ -85,7 +86,7 @@ void WebServer::routing()
                         else
                         {
                             String pw = req->getParam("pw")->value();
-                            if (pw != "1234")
+                            if (pw != API_PASSWORD)
                             {
                                 req->send(400, "text/plain", "Auth Failed");
                                 return;

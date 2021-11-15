@@ -9,7 +9,7 @@
 #include "WebServer.h"
 #include "Animator.h"
 
-Connection conn("ya", "12345678y");
+Connection conn(WIFI_SSID, WIFI_PASSWORD);
 Animator animator(100, 100, 20);
 WebServer server(80);
 
