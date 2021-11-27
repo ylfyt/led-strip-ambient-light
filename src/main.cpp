@@ -10,7 +10,7 @@
 #include "Animator.h"
 
 Connection conn(WIFI_SSID, WIFI_PASSWORD);
-Animator animator(100, 100, 20);
+Animator animator(100, 100, 20, true);
 WebServer server(80);
 
 int count = 0;

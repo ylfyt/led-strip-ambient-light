@@ -2,6 +2,7 @@
 
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include <AsyncElegantOTA.h>
 #include <AsyncJson.h>
 #include <ArduinoJson.h>
 
@@ -36,6 +37,7 @@ void WebServer::begin()
 {
     this->routing();
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
+    AsyncElegantOTA.begin(&this->server, "yudialfayat", "352189@Nodemcu");
     this->server.begin();
 }
 
