@@ -17,6 +17,7 @@ private:
 
 public:
     Params();
+    Params(int b, int p, int s, int d, int l);
     ~Params();
     int getValue(String key);
     bool getStatus(String key);
@@ -25,6 +26,26 @@ public:
     void setAllStatus(bool status);
     void print();
 };
+
+Params::Params() : data(new AppData[5])
+{
+    this->num = 5;
+    this->data[0] = {false, "b", 0};
+    this->data[1] = {false, "p", 0};
+    this->data[2] = {false, "s", 0};
+    this->data[3] = {false, "d", 0};
+    this->data[4] = {false, "l", 0};
+}
+
+Params::Params(int b, int p, int s, int d, int l) : data(new AppData[5])
+{
+    this->num = 5;
+    this->data[0] = {false, "b", b};
+    this->data[1] = {false, "p", p};
+    this->data[2] = {false, "s", s};
+    this->data[3] = {false, "d", d};
+    this->data[4] = {false, "l", l};
+}
 
 void Params::print()
 {
@@ -91,16 +112,6 @@ void Params::setStatus(String key, bool status)
             return;
         }
     }
-}
-
-Params::Params() : data(new AppData[5])
-{
-    this->num = 5;
-    this->data[0] = {false, "b", 0};
-    this->data[1] = {false, "p", 0};
-    this->data[2] = {false, "s", 0};
-    this->data[3] = {false, "d", 0};
-    this->data[4] = {false, "l", 0};
 }
 
 Params::~Params()

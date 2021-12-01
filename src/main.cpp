@@ -9,15 +9,16 @@
 #include "WebServer.h"
 #include "Animator.h"
 
-Connection conn(WIFI_SSID, WIFI_PASSWORD);
-Animator animator(100, 100, 20, true);
-WebServer server(80);
-
 int count = 0;
 int NUM_PALETTES = sizeof(Palettes) / sizeof(Palettes[0]);
 
-Params params;
 bool newData = false;
+
+Connection conn(WIFI_SSID, WIFI_PASSWORD);
+WebServer server(80);
+
+Params params(20, 2, 10, 0, 1);
+Animator animator(100, 100, params.getValue("b"), params.getValue("d"));
 
 void parseData();
 void updateData();
@@ -27,13 +28,8 @@ void setup()
 {
 	Serial.begin(9600);
 	server.begin();
-	animator.begin(Palettes[2]);
 
-	params.setValue("p", 2);
-	params.setValue("b", 20);
-	params.setValue("d", 0);
-	params.setValue("l", 1);
-	params.setValue("s", 10);
+	animator.begin(Palettes[params.getValue("p")]);
 	server.params = params;
 }
 

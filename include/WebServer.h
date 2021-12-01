@@ -37,7 +37,7 @@ void WebServer::begin()
 {
     this->routing();
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
-    AsyncElegantOTA.begin(&this->server, "yudialfayat", "352189@Nodemcu");
+    AsyncElegantOTA.begin(&this->server, OTA_USERNAME, OTA_PASSWORD);
     this->server.begin();
 }
 
