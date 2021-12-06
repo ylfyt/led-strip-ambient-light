@@ -17,7 +17,12 @@ bool newData = false;
 Connection conn(WIFI_SSID, WIFI_PASSWORD);
 WebServer server(80);
 
-Params params(20, 2, 10, 0, 1);
+Params params(
+	DEFAULT_BRIGHTNESS,
+	DEFAULT_PALETTE,
+	DEFAULT_SPEED,
+	DEFAULT_DYNAMIC,
+	DEFAULT_LEFT);
 Animator animator(100, 100, params.getValue("b"), params.getValue("d"));
 
 void parseData();
