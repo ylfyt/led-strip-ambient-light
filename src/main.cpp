@@ -33,6 +33,7 @@ void setup()
 {
 	Serial.begin(9600);
 	server.begin();
+	conn.begin();
 
 	animator.begin(Palettes[params.getValue("p")]);
 	server.params = params;
