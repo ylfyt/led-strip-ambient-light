@@ -6,6 +6,10 @@
 #include "EEPROM.h"
 #include "credential.h"
 
+#define LED_BUILTIN_16 D0
+#define LED_ON digitalWrite(LED_BUILTIN_16, LOW)
+#define LED_OFF digitalWrite(LED_BUILTIN_16, HIGH)
+
 struct IPDevice
 {
     byte x1;
@@ -29,6 +33,7 @@ private:
     int connectionState;
     HTTPSRedirect client;
     bool isIpEEPROMUptodate;
+    byte ledState;
 
 public:
     Connection(String, String);
@@ -50,6 +55,9 @@ Connection::Connection(String ssid, String pass) : client(443)
     this->connectionState = 0;
     WiFi.mode(WIFI_STA);
     client.setInsecure();
+
+    this->ledState = HIGH;
+    pinMode(LED_BUILTIN_16, OUTPUT);
 }
 
 Connection::~Connection()
@@ -58,6 +66,7 @@ Connection::~Connection()
 
 void Connection::begin()
 {
+
     EEPROM.begin(512);
 
     IPDevice ip;
@@ -95,6 +104,11 @@ void Connection::connect()
     EVERY_N_MILLISECONDS(100)
     {
         Serial.print(".");
+
+        if (this->ledState * 100 < 3000)
+        {
+            (++this->ledState % 2 == 1) ? LED_ON : LED_OFF;
+        }
     }
 }
 
@@ -126,6 +140,10 @@ void Connection::checkConnection()
         if (this->connectionState == 1)
         {
             this->connectionState = 2;
+
+            this->ledState = 0;
+            LED_OFF;
+
             Serial.println();
             Serial.print("Connected http://");
             IPAddress ip = WiFi.localIP();
@@ -183,6 +201,7 @@ bool Connection::checkPrevIP(IPAddress ip)
 
 void Connection::pushIpToDB()
 {
+    LED_ON;
     Serial.println("Updating IP to DB");
     const char *host = "script.google.com";
     String url = GAPI_URL;
@@ -205,6 +224,7 @@ void Connection::pushIpToDB()
     {
         Serial.println("DB Update Failed: " + ip);
     }
+    LED_OFF;
 }
 
 #endif
