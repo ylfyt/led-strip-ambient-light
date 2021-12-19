@@ -52,8 +52,7 @@ void WebServer::routing()
                                 else
                                 {
                                     request->send(404);
-                                }
-                            });
+                                } });
 
     this->server.on("/", [&](AsyncWebServerRequest *req)
                     { req->send(200, "text/html", "<h1>Hello, World</h1>"); });
@@ -76,8 +75,7 @@ void WebServer::routing()
                         String json = this->getCurrentJson();
 
                         // params.print();
-                        req->send(200, "application/json", json);
-                    });
+                        req->send(200, "application/json", json); });
 
     this->server.on("/strip", HTTP_GET, [this](AsyncWebServerRequest *req)
                     {
@@ -139,8 +137,7 @@ void WebServer::routing()
                             }
                             // params.print();
                             req->send(200, "text/plain", "ok");
-                        }
-                    });
+                        } });
 }
 
 String WebServer::getCurrentJson()
@@ -161,11 +158,11 @@ String WebServer::getCurrentJson()
     else
         direction = "right";
 
-    int n = sizeof(palettesName) / sizeof(palettesName[0]);
+    size_t n = sizeof(palettesName) / sizeof(palettesName[0]);
     String names = "[";
     for (size_t i = 0; i < n; i++)
     {
-        if (i != n - 1)
+        if (i != (size_t)(n - 1))
             names += "\"" + palettesName[i] + "\",";
         else
             names += "\"" + palettesName[i] + "\"";

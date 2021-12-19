@@ -13,7 +13,7 @@ class Params
 {
 private:
     AppData *data;
-    int num;
+    size_t num;
 
 public:
     Params();

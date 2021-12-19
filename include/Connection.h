@@ -209,9 +209,9 @@ void Connection::pushIpToDB()
     String ip = getString(this->prevIP);
     String dataIP = "{\"name\":\"IPNODE\",\"email\":\"NODE\",\"message\":\"" + ip + "\"}";
 
-    int conn = client.connect(host, 443);
+    client.connect(host, 443);
     client.setContentTypeHeader("text/plain");
-    int status = client.POST(url, host, dataIP);
+    client.POST(url, host, dataIP);
     bool body = client.getResponseBody();
 
     if (body == true)
