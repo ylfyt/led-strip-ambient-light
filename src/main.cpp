@@ -71,6 +71,25 @@ void loop()
 			cusPalette.loadDynamicGradientPalette(cus);
 			animator.setPalette(cusPalette);
 			toogle = true;
+
+			Serial.print("ESP.getBootMode(); ");
+			Serial.println(ESP.getBootMode());
+			Serial.print("ESP.getSdkVersion(); ");
+			Serial.println(ESP.getSdkVersion());
+			Serial.print("ESP.getBootVersion(); ");
+			Serial.println(ESP.getBootVersion());
+			Serial.print("ESP.getChipId(); ");
+			Serial.println(ESP.getChipId());
+			Serial.print("ESP.getFlashChipSize(); ");
+			Serial.println(ESP.getFlashChipSize());
+			Serial.print("ESP.getFlashChipRealSize(); ");
+			Serial.println(ESP.getFlashChipRealSize());
+			Serial.print("ESP.getFlashChipSizeByChipId(); ");
+			Serial.println(ESP.getFlashChipSizeByChipId());
+			Serial.print("ESP.getFlashChipId(); ");
+			Serial.println(ESP.getFlashChipId());
+			Serial.print("ESP.getFreeHeap(); ");
+			Serial.println(ESP.getFreeHeap());
 		}
 	}
 }
