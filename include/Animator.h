@@ -107,6 +107,21 @@ void Animator::run()
                 this->paletteIndex++;
         }
     }
+    else
+    {
+        if (this->paletteIndex != 0)
+        {
+            long curr = millis();
+            if (curr - this->prev >= this->speed)
+            {
+                this->prev = curr;
+                if (this->leftDir)
+                    this->paletteIndex--;
+                else
+                    this->paletteIndex++;
+            }
+        }
+    }
     this->refresh();
 }
 
