@@ -29,6 +29,8 @@ void parseData();
 void updateData();
 void changePalette(int idx);
 
+bool toogle = false;
+
 void setup()
 {
 	Serial.begin(9600);
@@ -56,6 +58,21 @@ void loop()
 	}
 
 	animator.run();
+
+	if (!toogle)
+	{
+		if (millis() > 15000)
+		{
+			CRGBPalette16 cusPalette;
+			byte cus[] =
+				{0, 0, 255, 0,
+				 255, 255, 0, 0};
+
+			cusPalette.loadDynamicGradientPalette(cus);
+			animator.setPalette(cusPalette);
+			toogle = true;
+		}
+	}
 }
 
 void updateData()
