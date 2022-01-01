@@ -28,6 +28,7 @@ Animator animator(100, 100, params.getValue("b"), params.getValue("d"));
 void parseData();
 void updateData();
 void changePalette(int idx);
+void stringToPalette(String data);
 
 bool toogle = false;
 
@@ -58,40 +59,6 @@ void loop()
 	}
 
 	animator.run();
-
-	if (!toogle)
-	{
-		if (millis() > 15000)
-		{
-			CRGBPalette16 cusPalette;
-			byte cus[] =
-				{0, 0, 255, 0,
-				 255, 255, 0, 0};
-
-			cusPalette.loadDynamicGradientPalette(cus);
-			animator.setPalette(cusPalette);
-			toogle = true;
-
-			Serial.print("ESP.getBootMode(); ");
-			Serial.println(ESP.getBootMode());
-			Serial.print("ESP.getSdkVersion(); ");
-			Serial.println(ESP.getSdkVersion());
-			Serial.print("ESP.getBootVersion(); ");
-			Serial.println(ESP.getBootVersion());
-			Serial.print("ESP.getChipId(); ");
-			Serial.println(ESP.getChipId());
-			Serial.print("ESP.getFlashChipSize(); ");
-			Serial.println(ESP.getFlashChipSize());
-			Serial.print("ESP.getFlashChipRealSize(); ");
-			Serial.println(ESP.getFlashChipRealSize());
-			Serial.print("ESP.getFlashChipSizeByChipId(); ");
-			Serial.println(ESP.getFlashChipSizeByChipId());
-			Serial.print("ESP.getFlashChipId(); ");
-			Serial.println(ESP.getFlashChipId());
-			Serial.print("ESP.getFreeHeap(); ");
-			Serial.println(ESP.getFreeHeap());
-		}
-	}
 }
 
 void updateData()
@@ -125,6 +92,47 @@ void updateData()
 		int val = params.getValue("s");
 		animator.setSpeed(val);
 	};
+
+	if (params.getStatus("c"))
+	{
+		String data = params.customColorData;
+		stringToPalette(data);
+	}
+}
+
+void stringToPalette(String data)
+{
+	int num = 0;
+	for (size_t i = 0; i < data.length(); i++)
+	{
+		if (data[i] == ',')
+			num++;
+	}
+
+	if (num < 7 || (num + 1) % 4 != 0)
+	{
+		return;
+	}
+
+	byte colors[num];
+
+	char *input = (char *)data.c_str();
+	char separator[] = ",";
+	char *token;
+
+	token = strtok(input, separator);
+	byte idx = 0;
+	// Find any more?
+	while (token != NULL)
+	{
+		byte px = atoi(token);
+		colors[idx++] = px;
+		token = strtok(NULL, separator);
+	}
+
+	CRGBPalette16 cusPalette;
+	cusPalette.loadDynamicGradientPalette(colors);
+	animator.setPalette(cusPalette);
 }
 
 void changePalette(int idx)

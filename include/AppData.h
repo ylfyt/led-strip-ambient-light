@@ -14,8 +14,10 @@ class Params
 private:
     AppData *data;
     size_t num;
+    bool newCustomColor;
 
 public:
+    String customColorData;
     Params();
     Params(int b, int p, int s, int d, int l);
     ~Params();
@@ -25,6 +27,7 @@ public:
     void setStatus(String key, bool status);
     void setAllStatus(bool status);
     void print();
+    void setCustomColorData(String val);
 };
 
 Params::Params() : data(new AppData[5])
@@ -66,6 +69,7 @@ void Params::setAllStatus(bool status)
     {
         this->data[i].status = status;
     }
+    this->newCustomColor = false;
 }
 
 int Params::getValue(String key)
@@ -87,6 +91,11 @@ bool Params::getStatus(String key)
             return this->data[i].status;
     }
 
+    if (key == "c")
+    {
+        return this->newCustomColor;
+    }
+
     return false;
 }
 
@@ -100,6 +109,12 @@ void Params::setValue(String key, int val)
             return;
         }
     }
+}
+
+void Params::setCustomColorData(String val)
+{
+    customColorData = val;
+    this->newCustomColor = true;
 }
 
 void Params::setStatus(String key, bool status)

@@ -135,6 +135,13 @@ void WebServer::routing()
                                 this->params.setValue("l", val);
                                 this->anyReq = true;
                             }
+
+                            if (req->hasParam("c"))
+                            {
+                                String val = req->getParam("c")->value();
+                                this->params.setCustomColorData(val);
+                                this->anyReq = true;
+                            }
                             // params.print();
                             req->send(200, "text/plain", "ok");
                         } });
