@@ -5,6 +5,7 @@
 #include <HTTPSRedirect.h>
 #include "EEPROM.h"
 #include "credential.h"
+#include "constants.h"
 
 #define LED_BUILTIN_16 D0
 #define LED_ON digitalWrite(LED_BUILTIN_16, LOW)

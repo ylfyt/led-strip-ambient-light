@@ -8,6 +8,7 @@
 #include "Connection.h"
 #include "WebServer.h"
 #include "Animator.h"
+#include "constants.h"
 
 int count = 0;
 int NUM_PALETTES = sizeof(Palettes) / sizeof(Palettes[0]);
