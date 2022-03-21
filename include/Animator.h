@@ -1,4 +1,5 @@
 #ifndef __ANIMATOR_H__
+#define __ANIMATOR_H__
 
 #include <FastLED.h>
 

@@ -1,4 +1,5 @@
 #ifndef __CONNECTION_H__
+#define __CONNECTION_H__
 
 #include <ESP8266WiFi.h>
 #include <FastLED.h>

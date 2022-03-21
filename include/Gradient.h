@@ -1,4 +1,5 @@
 #ifndef __GRADIENT_H__
+#define __GRADIENT_H__
 
 #include <FastLED.h>
 

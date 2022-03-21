@@ -1,4 +1,5 @@
 #ifndef __PALETTE_H__
+#define __PALETTE_H__
 
 #include <FastLED.h>
 #include "Gradient.h"
